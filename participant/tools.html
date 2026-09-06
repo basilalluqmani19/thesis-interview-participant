@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="no-referrer">
+    <meta name="description" content="Bilingual tools and technologies questions for a Master's thesis interview system.">
+    <title>Tools & Technologies — Master's Thesis Interview</title>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content / الانتقال إلى المحتوى</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="logo-placeholder" aria-label="University logo placeholder">University<br>Logo</div>
+        <div class="identity"><p class="eyebrow">Master’s Thesis Research Project</p><h1>Imam Mohammad Ibn Saud Islamic University</h1><p>College of Computer and Information Sciences · Master of Information Management</p></div>
+        <span class="prototype-badge">Research interview · مقابلة بحثية</span>
+      </div>
+      <div class="research-title-band"><div class="header-inner"><div class="bilingual compact"><p class="en">Transition from Data Warehouse to Data Lakehouse: A Comparative Study between Traditional and Modern Models</p><p class="ar" lang="ar" dir="rtl">الانتقال من مستودع البيانات إلى مستودع بحيرة البيانات: دراسة مقارنة بين النماذج التقليدية والحديثة</p></div></div></div>
+    </header>
+
+    <nav class="workflow-nav" aria-label="Interview steps">
+      <ol class="workflow-list">
+        <li><a data-preserve-query href="index.html"><b class="step-number">1</b><span class="step-label">Consent / الموافقة</span></a></li>
+        <li><a data-preserve-query href="background.html"><b class="step-number">2</b><span class="step-label">Background / الخلفية</span></a></li>
+        <li><span class="current" aria-current="step"><b class="step-number">3</b><span class="step-label">Tools / الأدوات</span></span></li>
+        <li><a data-preserve-query href="interview.html"><b class="step-number">4</b><span class="step-label">Interview / المقابلة</span></a></li>
+      </ol>
+    </nav>
+
+    <main id="main-content" class="page-shell">
+      <section class="page-intro">
+        <p class="page-eyebrow">Step 3 of 4 / الخطوة 3 من 4</p>
+        <div class="bilingual">
+          <div class="en"><h2>Tools & Technologies</h2><p>Select the technologies you have used in each category. Choose “None / Not applicable” when you have no experience with a category.</p></div>
+          <div class="ar" lang="ar" dir="rtl"><h2>الأدوات والتقنيات</h2><p>اختر التقنيات التي استخدمتها في كل فئة. اختر «لا شيء / لا ينطبق» إذا لم تكن لديك خبرة في إحدى الفئات.</p></div>
+        </div>
+      </section>
+
+      <div class="prototype-note"><div class="bilingual compact"><div class="en">Each category A–F requires at least one response. “None / Not applicable” cannot be selected with another item in the same category.</div><div class="ar" lang="ar" dir="rtl">تتطلب كل فئة من A إلى F اختيارًا واحدًا على الأقل. ولا يمكن اختيار «لا شيء / لا ينطبق» مع خيار آخر في الفئة نفسها.</div></div></div>
+      <div class="error-summary" data-error-summary hidden role="alert"><h3>Some required information is missing / توجد معلومات مطلوبة غير مكتملة</h3><p>Please review the highlighted categories. Missing categories: <strong data-error-count>0</strong>.</p></div>
+
+      <form id="toolsForm" data-prototype-form="tools" data-next-page="interview.html" novalidate>
+        <div class="form-section">
+          <fieldset class="tool-category" data-required-group>
+            <legend><p class="section-kicker">Category A</p><div class="bilingual"><div class="en"><h3>Data Warehouse / Analytical Platforms <span class="required-mark">*</span></h3><p class="helper-text">Which Data Warehouse or analytical platforms have you used?</p></div><div class="ar" lang="ar" dir="rtl"><h3>مستودعات البيانات / المنصات التحليلية <span class="required-mark">*</span></h3><p class="helper-text">ما منصات مستودعات البيانات أو المنصات التحليلية التي استخدمتها؟</p></div></div></legend>
+            <div class="option-grid">
+              <label class="option"><input type="checkbox" name="tools_dw" value="oracle"><span class="option-copy"><span>Oracle</span><span class="ar">Oracle</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_dw" value="sql_server"><span class="option-copy"><span>Microsoft SQL Server</span><span class="ar">Microsoft SQL Server</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_dw" value="postgresql"><span class="option-copy"><span>PostgreSQL</span><span class="ar">PostgreSQL</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_dw" value="teradata"><span class="option-copy"><span>Teradata</span><span class="ar">Teradata</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_dw" value="snowflake"><span class="option-copy"><span>Snowflake</span><span class="ar">Snowflake</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_dw" value="redshift"><span class="option-copy"><span>Amazon Redshift</span><span class="ar">Amazon Redshift</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_dw" value="bigquery"><span class="option-copy"><span>Google BigQuery</span><span class="ar">Google BigQuery</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_dw" value="synapse"><span class="option-copy"><span>Azure Synapse Analytics</span><span class="ar">Azure Synapse Analytics</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_dw" value="sap"><span class="option-copy"><span>SAP HANA / BW</span><span class="ar">SAP HANA / BW</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_dw" value="other" data-other-controller="#tools_dw_other"><span class="option-copy"><span>Other</span><span class="ar">أخرى</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_dw" value="none" data-none-option><span class="option-copy"><span>None / Not applicable</span><span class="ar">لا شيء / لا ينطبق</span></span></label>
+            </div><div class="other-input-wrap"><label class="input-label" for="tools_dw_other">Please specify / يرجى التوضيح</label><input id="tools_dw_other" name="tools_dw_other" type="text" disabled></div><p class="validation-message" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="tool-category" data-required-group>
+            <legend><p class="section-kicker">Category B</p><div class="bilingual"><div class="en"><h3>Data Lake / Storage <span class="required-mark">*</span></h3><p class="helper-text">Which Data Lake or storage technologies have you used?</p></div><div class="ar" lang="ar" dir="rtl"><h3>بحيرة البيانات / التخزين <span class="required-mark">*</span></h3><p class="helper-text">ما تقنيات بحيرة البيانات أو التخزين التي استخدمتها؟</p></div></div></legend>
+            <div class="option-grid">
+              <label class="option"><input type="checkbox" name="tools_lake" value="hdfs"><span class="option-copy"><span>Hadoop HDFS</span><span class="ar">Hadoop HDFS</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_lake" value="s3"><span class="option-copy"><span>Amazon S3</span><span class="ar">Amazon S3</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_lake" value="adls"><span class="option-copy"><span>Azure Data Lake Storage</span><span class="ar">Azure Data Lake Storage</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_lake" value="gcs"><span class="option-copy"><span>Google Cloud Storage</span><span class="ar">Google Cloud Storage</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_lake" value="cloudera"><span class="option-copy"><span>Cloudera Data Platform</span><span class="ar">Cloudera Data Platform</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_lake" value="minio"><span class="option-copy"><span>MinIO</span><span class="ar">MinIO</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_lake" value="onelake"><span class="option-copy"><span>Microsoft OneLake</span><span class="ar">Microsoft OneLake</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_lake" value="other" data-other-controller="#tools_lake_other"><span class="option-copy"><span>Other</span><span class="ar">أخرى</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_lake" value="none" data-none-option><span class="option-copy"><span>None / Not applicable</span><span class="ar">لا شيء / لا ينطبق</span></span></label>
+            </div><div class="other-input-wrap"><label class="input-label" for="tools_lake_other">Please specify / يرجى التوضيح</label><input id="tools_lake_other" name="tools_lake_other" type="text" disabled></div><p class="validation-message" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="tool-category" data-required-group>
+            <legend><p class="section-kicker">Category C</p><div class="bilingual"><div class="en"><h3>Data Lakehouse / Table Formats <span class="required-mark">*</span></h3><p class="helper-text">Which Data Lakehouse platforms or table formats have you used?</p></div><div class="ar" lang="ar" dir="rtl"><h3>Data Lakehouse / صيغ الجداول <span class="required-mark">*</span></h3><p class="helper-text">ما منصات Data Lakehouse أو صيغ الجداول التي استخدمتها؟</p></div></div></legend>
+            <div class="option-grid">
+              <label class="option"><input type="checkbox" name="tools_lakehouse" value="iceberg"><span class="option-copy"><span>Apache Iceberg</span><span class="ar">Apache Iceberg</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_lakehouse" value="delta"><span class="option-copy"><span>Delta Lake</span><span class="ar">Delta Lake</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_lakehouse" value="hudi"><span class="option-copy"><span>Apache Hudi</span><span class="ar">Apache Hudi</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_lakehouse" value="databricks"><span class="option-copy"><span>Databricks Lakehouse</span><span class="ar">Databricks Lakehouse</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_lakehouse" value="fabric"><span class="option-copy"><span>Microsoft Fabric / OneLake</span><span class="ar">Microsoft Fabric / OneLake</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_lakehouse" value="spark_formats"><span class="option-copy"><span>Apache Spark with Iceberg / Delta / Hudi</span><span class="ar">Apache Spark مع Iceberg / Delta / Hudi</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_lakehouse" value="other" data-other-controller="#tools_lakehouse_other"><span class="option-copy"><span>Other</span><span class="ar">أخرى</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_lakehouse" value="none" data-none-option><span class="option-copy"><span>None / Not applicable</span><span class="ar">لا شيء / لا ينطبق</span></span></label>
+            </div><div class="other-input-wrap"><label class="input-label" for="tools_lakehouse_other">Please specify / يرجى التوضيح</label><input id="tools_lakehouse_other" name="tools_lakehouse_other" type="text" disabled></div><p class="validation-message" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="tool-category" data-required-group>
+            <legend><p class="section-kicker">Category D</p><div class="bilingual"><div class="en"><h3>Big Data Processing <span class="required-mark">*</span></h3><p class="helper-text">Which Big Data processing technologies have you used?</p></div><div class="ar" lang="ar" dir="rtl"><h3>معالجة البيانات الضخمة <span class="required-mark">*</span></h3><p class="helper-text">ما تقنيات معالجة البيانات الضخمة التي استخدمتها؟</p></div></div></legend>
+            <div class="option-grid">
+              <label class="option"><input type="checkbox" name="tools_bigdata" value="spark"><span class="option-copy"><span>Apache Spark</span><span class="ar">Apache Spark</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_bigdata" value="kafka"><span class="option-copy"><span>Apache Kafka</span><span class="ar">Apache Kafka</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_bigdata" value="flink"><span class="option-copy"><span>Apache Flink</span><span class="ar">Apache Flink</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_bigdata" value="hive"><span class="option-copy"><span>Apache Hive</span><span class="ar">Apache Hive</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_bigdata" value="impala"><span class="option-copy"><span>Apache Impala</span><span class="ar">Apache Impala</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_bigdata" value="kudu"><span class="option-copy"><span>Apache Kudu</span><span class="ar">Apache Kudu</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_bigdata" value="trino"><span class="option-copy"><span>Presto / Trino</span><span class="ar">Presto / Trino</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_bigdata" value="other" data-other-controller="#tools_bigdata_other"><span class="option-copy"><span>Other</span><span class="ar">أخرى</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_bigdata" value="none" data-none-option><span class="option-copy"><span>None / Not applicable</span><span class="ar">لا شيء / لا ينطبق</span></span></label>
+            </div><div class="other-input-wrap"><label class="input-label" for="tools_bigdata_other">Please specify / يرجى التوضيح</label><input id="tools_bigdata_other" name="tools_bigdata_other" type="text" disabled></div><p class="validation-message" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="tool-category" data-required-group>
+            <legend><p class="section-kicker">Category E</p><div class="bilingual"><div class="en"><h3>Orchestration & ETL / ELT <span class="required-mark">*</span></h3><p class="helper-text">Which orchestration and ETL / ELT tools have you used?</p></div><div class="ar" lang="ar" dir="rtl"><h3>الجدولة و ETL / ELT <span class="required-mark">*</span></h3><p class="helper-text">ما أدوات الجدولة و ETL / ELT التي استخدمتها؟</p></div></div></legend>
+            <div class="option-grid">
+              <label class="option"><input type="checkbox" name="tools_etl" value="airflow"><span class="option-copy"><span>Apache Airflow</span><span class="ar">Apache Airflow</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_etl" value="nifi"><span class="option-copy"><span>Apache NiFi</span><span class="ar">Apache NiFi</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_etl" value="informatica"><span class="option-copy"><span>Informatica</span><span class="ar">Informatica</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_etl" value="talend"><span class="option-copy"><span>Talend</span><span class="ar">Talend</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_etl" value="dbt"><span class="option-copy"><span>dbt</span><span class="ar">dbt</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_etl" value="ssis"><span class="option-copy"><span>SSIS</span><span class="ar">SSIS</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_etl" value="glue"><span class="option-copy"><span>AWS Glue</span><span class="ar">AWS Glue</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_etl" value="adf"><span class="option-copy"><span>Azure Data Factory</span><span class="ar">Azure Data Factory</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_etl" value="other" data-other-controller="#tools_etl_other"><span class="option-copy"><span>Other</span><span class="ar">أخرى</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_etl" value="none" data-none-option><span class="option-copy"><span>None / Not applicable</span><span class="ar">لا شيء / لا ينطبق</span></span></label>
+            </div><div class="other-input-wrap"><label class="input-label" for="tools_etl_other">Please specify / يرجى التوضيح</label><input id="tools_etl_other" name="tools_etl_other" type="text" disabled></div><p class="validation-message" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="tool-category" data-required-group>
+            <legend><p class="section-kicker">Category F</p><div class="bilingual"><div class="en"><h3>Governance / Catalog / Metadata <span class="required-mark">*</span></h3><p class="helper-text">Which governance, catalog, or metadata tools have you used?</p></div><div class="ar" lang="ar" dir="rtl"><h3>الحوكمة / الفهرسة / البيانات الوصفية <span class="required-mark">*</span></h3><p class="helper-text">ما أدوات الحوكمة أو الفهرسة أو البيانات الوصفية التي استخدمتها؟</p></div></div></legend>
+            <div class="option-grid">
+              <label class="option"><input type="checkbox" name="tools_governance" value="hive_metastore"><span class="option-copy"><span>Hive Metastore</span><span class="ar">Hive Metastore</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_governance" value="glue_catalog"><span class="option-copy"><span>AWS Glue Data Catalog</span><span class="ar">AWS Glue Data Catalog</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_governance" value="atlas"><span class="option-copy"><span>Apache Atlas</span><span class="ar">Apache Atlas</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_governance" value="ranger"><span class="option-copy"><span>Apache Ranger</span><span class="ar">Apache Ranger</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_governance" value="purview"><span class="option-copy"><span>Microsoft Purview</span><span class="ar">Microsoft Purview</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_governance" value="unity"><span class="option-copy"><span>Unity Catalog</span><span class="ar">Unity Catalog</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_governance" value="collibra"><span class="option-copy"><span>Collibra</span><span class="ar">Collibra</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_governance" value="alation"><span class="option-copy"><span>Alation</span><span class="ar">Alation</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_governance" value="other" data-other-controller="#tools_governance_other"><span class="option-copy"><span>Other</span><span class="ar">أخرى</span></span></label>
+              <label class="option"><input type="checkbox" name="tools_governance" value="none" data-none-option><span class="option-copy"><span>None / Not applicable</span><span class="ar">لا شيء / لا ينطبق</span></span></label>
+            </div><div class="other-input-wrap"><label class="input-label" for="tools_governance_other">Please specify / يرجى التوضيح</label><input id="tools_governance_other" name="tools_governance_other" type="text" disabled></div><p class="validation-message" role="alert"></p>
+          </fieldset>
+
+          <section class="tool-category">
+            <p class="section-kicker">Category G</p>
+            <div class="bilingual"><div class="en"><h3>Other Relevant Tools <span class="optional-label">(Optional)</span></h3><p class="helper-text">Are there any other relevant tools you have used that were not mentioned?</p></div><div class="ar" lang="ar" dir="rtl"><h3>أدوات أخرى ذات علاقة <span class="optional-label">(اختياري)</span></h3><p class="helper-text">هل توجد أدوات أخرى ذات علاقة استخدمتها ولم يتم ذكرها؟</p></div></div>
+            <label class="response-label" for="other_relevant_tools"><span>Other tools</span><span class="ar" lang="ar" dir="rtl">أدوات أخرى</span></label>
+            <textarea id="other_relevant_tools" name="other_relevant_tools" class="short" placeholder="List any other relevant tools, or leave blank. / اذكر أي أدوات أخرى ذات علاقة، أو اترك الحقل فارغًا."></textarea>
+          </section>
+        </div>
+
+        <div class="form-actions">
+          <a class="button secondary" data-preserve-query href="background.html">Back / رجوع</a>
+          <span class="saved-state" data-saved-state aria-live="polite">Not saved yet / لم يتم الحفظ بعد</span>
+          <button class="button" type="submit">Continue to Interview / المتابعة إلى المقابلة</button>
+        </div>
+      </form>
+    </main>
+
+    <footer class="site-footer"><div class="footer-inner"><p>Master’s Thesis Research Project — not an official university institutional system.</p><p>Participant reference: <span data-participant-reference></span></p></div></footer>
+    <script defer src="js/config.js"></script>
+    <script defer src="js/backend.js"></script>
+    <script defer src="js/validation.js"></script>
+    <script defer src="js/app.js"></script>
+  </body>
+</html>

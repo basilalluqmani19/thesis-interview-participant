@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="no-referrer">
+    <meta name="description" content="Bilingual participant background questions for a Master's thesis interview system.">
+    <title>Participant Background — Master's Thesis Interview</title>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content / الانتقال إلى المحتوى</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="logo-placeholder" aria-label="University logo placeholder">University<br>Logo</div>
+        <div class="identity">
+          <p class="eyebrow">Master’s Thesis Research Project</p>
+          <h1>Imam Mohammad Ibn Saud Islamic University</h1>
+          <p>College of Computer and Information Sciences · Master of Information Management</p>
+        </div>
+        <span class="prototype-badge">Research interview · مقابلة بحثية</span>
+      </div>
+      <div class="research-title-band">
+        <div class="header-inner"><div class="bilingual compact"><p class="en">Transition from Data Warehouse to Data Lakehouse: A Comparative Study between Traditional and Modern Models</p><p class="ar" lang="ar" dir="rtl">الانتقال من مستودع البيانات إلى مستودع بحيرة البيانات: دراسة مقارنة بين النماذج التقليدية والحديثة</p></div></div>
+      </div>
+    </header>
+
+    <nav class="workflow-nav" aria-label="Interview steps">
+      <ol class="workflow-list">
+        <li><a data-preserve-query href="index.html"><b class="step-number">1</b><span class="step-label">Consent / الموافقة</span></a></li>
+        <li><span class="current" aria-current="step"><b class="step-number">2</b><span class="step-label">Background / الخلفية</span></span></li>
+        <li><a data-preserve-query href="tools.html"><b class="step-number">3</b><span class="step-label">Tools / الأدوات</span></a></li>
+        <li><a data-preserve-query href="interview.html"><b class="step-number">4</b><span class="step-label">Interview / المقابلة</span></a></li>
+      </ol>
+    </nav>
+
+    <main id="main-content" class="page-shell">
+      <section class="page-intro">
+        <p class="page-eyebrow">Step 2 of 4 / الخطوة 2 من 4</p>
+        <div class="bilingual">
+          <div class="en"><h2>Participant Background</h2><p>These questions gather general information about your professional role and experience. Select the option that best represents your situation.</p></div>
+          <div class="ar" lang="ar" dir="rtl"><h2>خلفية المشارك</h2><p>تجمع هذه الأسئلة معلومات عامة عن دورك المهني وخبرتك. اختر الخيار الذي يمثل وضعك بصورة أفضل.</p></div>
+        </div>
+      </section>
+
+      <div class="prototype-note"><div class="bilingual compact"><div class="en">All 11 standard questions are required. Select “Other” only when needed and provide a short description.</div><div class="ar" lang="ar" dir="rtl">جميع الأسئلة الأساسية الأحد عشر مطلوبة. اختر «أخرى» عند الحاجة فقط، ثم قدم وصفًا مختصرًا.</div></div></div>
+      <div class="error-summary" data-error-summary hidden role="alert"><h3>Some required information is missing / توجد معلومات مطلوبة غير مكتملة</h3><p>Please review the highlighted items. Missing sections: <strong data-error-count>0</strong>.</p></div>
+
+      <form id="backgroundForm" data-prototype-form="background" data-next-page="tools.html" novalidate>
+        <div class="form-section">
+          <div class="field-card" data-public-only hidden>
+            <div class="bilingual"><div class="en"><label class="input-label" for="public_name">Name <span class="optional-label">(Optional for a public response)</span></label><p class="helper-text">You may leave this blank.</p></div><div class="ar" lang="ar" dir="rtl"><label class="input-label" for="public_name">الاسم <span class="optional-label">(اختياري للاستجابة العامة)</span></label><p class="helper-text">يمكنك ترك هذا الحقل فارغًا.</p></div></div>
+            <input id="public_name" name="public_name" type="text" autocomplete="name">
+          </div>
+
+          <fieldset class="field-card" data-required-group>
+            <legend><div class="bilingual"><p class="question-title en">1. Current Role / Job Title <span class="required-mark">*</span></p><p class="question-title ar" lang="ar" dir="rtl">1. المسمى الوظيفي الحالي <span class="required-mark">*</span></p></div></legend>
+            <div class="option-grid">
+              <label class="option"><input type="radio" name="current_role" value="executive_data_leadership"><span class="option-copy"><span>Chief / Executive Data Leadership — CDO, GM, Director of Data</span><span class="ar">القيادة التنفيذية للبيانات — CDO أو مدير عام أو مدير بيانات</span></span></label>
+              <label class="option"><input type="radio" name="current_role" value="head_of_data"><span class="option-copy"><span>Head of Data / Head of Data Engineering</span><span class="ar">رئيس البيانات / رئيس هندسة البيانات</span></span></label>
+              <label class="option"><input type="radio" name="current_role" value="data_platform_manager"><span class="option-copy"><span>Data Engineering / Data Platform Manager</span><span class="ar">مدير هندسة البيانات / منصة البيانات</span></span></label>
+              <label class="option"><input type="radio" name="current_role" value="lead_senior_engineer"><span class="option-copy"><span>Lead / Senior Data Engineer</span><span class="ar">قائد / مهندس بيانات أول</span></span></label>
+              <label class="option"><input type="radio" name="current_role" value="data_engineer"><span class="option-copy"><span>Data Engineer / Big Data Engineer / Data Platform Engineer</span><span class="ar">مهندس بيانات / بيانات ضخمة / منصة بيانات</span></span></label>
+              <label class="option"><input type="radio" name="current_role" value="data_architect"><span class="option-copy"><span>Data Architect / Big Data Architect</span><span class="ar">معماري بيانات / معماري بيانات ضخمة</span></span></label>
+              <label class="option"><input type="radio" name="current_role" value="analytics_bi_engineer"><span class="option-copy"><span>Analytics Engineer / BI Engineer</span><span class="ar">مهندس تحليلات / مهندس ذكاء أعمال</span></span></label>
+              <label class="option"><input type="radio" name="current_role" value="analyst_scientist"><span class="option-copy"><span>Data Analyst / Data Scientist</span><span class="ar">محلل بيانات / عالم بيانات</span></span></label>
+              <label class="option"><input type="radio" name="current_role" value="governance"><span class="option-copy"><span>Data Governance Manager / Specialist</span><span class="ar">مدير / أخصائي حوكمة بيانات</span></span></label>
+              <label class="option"><input type="radio" name="current_role" value="dba"><span class="option-copy"><span>Database Administrator</span><span class="ar">مسؤول قواعد بيانات</span></span></label>
+              <label class="option"><input type="radio" name="current_role" value="it_manager"><span class="option-copy"><span>IT / Technology Manager</span><span class="ar">مدير تقنية معلومات / تقنية</span></span></label>
+              <label class="option"><input type="radio" name="current_role" value="other" data-other-controller="#role_other"><span class="option-copy"><span>Other</span><span class="ar">أخرى</span></span></label>
+            </div>
+            <div class="other-input-wrap"><label class="input-label" for="role_other">Please specify / يرجى التوضيح</label><input id="role_other" name="role_other" type="text" disabled></div>
+            <p class="validation-message" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="field-card" data-required-group>
+            <legend><div class="bilingual"><p class="question-title en">2. Highest Educational Qualification <span class="required-mark">*</span></p><p class="question-title ar" lang="ar" dir="rtl">2. أعلى مؤهل علمي <span class="required-mark">*</span></p></div></legend>
+            <div class="option-grid">
+              <label class="option"><input type="radio" name="qualification" value="diploma"><span class="option-copy"><span>Diploma</span><span class="ar">دبلوم</span></span></label>
+              <label class="option"><input type="radio" name="qualification" value="bachelor"><span class="option-copy"><span>Bachelor’s Degree</span><span class="ar">بكالوريوس</span></span></label>
+              <label class="option"><input type="radio" name="qualification" value="master"><span class="option-copy"><span>Master’s Degree</span><span class="ar">ماجستير</span></span></label>
+              <label class="option"><input type="radio" name="qualification" value="phd"><span class="option-copy"><span>PhD</span><span class="ar">دكتوراه</span></span></label>
+              <label class="option"><input type="radio" name="qualification" value="professional_other"><span class="option-copy"><span>Professional Certification / Other</span><span class="ar">شهادة مهنية / أخرى</span></span></label>
+            </div><p class="validation-message" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="field-card" data-required-group>
+            <legend><div class="bilingual"><p class="question-title en">3. Field of Study / Specialization <span class="required-mark">*</span></p><p class="question-title ar" lang="ar" dir="rtl">3. مجال الدراسة / التخصص <span class="required-mark">*</span></p></div></legend>
+            <div class="option-grid">
+              <label class="option"><input type="radio" name="specialization" value="cs_ce"><span class="option-copy"><span>Computer Science / Computer Engineering</span><span class="ar">علوم الحاسب / هندسة الحاسب</span></span></label>
+              <label class="option"><input type="radio" name="specialization" value="is_it"><span class="option-copy"><span>Information Systems / Information Technology</span><span class="ar">نظم المعلومات / تقنية المعلومات</span></span></label>
+              <label class="option"><input type="radio" name="specialization" value="information_management"><span class="option-copy"><span>Information Management</span><span class="ar">إدارة المعلومات</span></span></label>
+              <label class="option"><input type="radio" name="specialization" value="data_science"><span class="option-copy"><span>Data Science / Analytics</span><span class="ar">علم البيانات / التحليلات</span></span></label>
+              <label class="option"><input type="radio" name="specialization" value="software"><span class="option-copy"><span>Software Engineering</span><span class="ar">هندسة البرمجيات</span></span></label>
+              <label class="option"><input type="radio" name="specialization" value="business"><span class="option-copy"><span>Business / Management</span><span class="ar">الأعمال / الإدارة</span></span></label>
+              <label class="option"><input type="radio" name="specialization" value="other" data-other-controller="#specialization_other"><span class="option-copy"><span>Other</span><span class="ar">أخرى</span></span></label>
+            </div><div class="other-input-wrap"><label class="input-label" for="specialization_other">Please specify / يرجى التوضيح</label><input id="specialization_other" name="specialization_other" type="text" disabled></div><p class="validation-message" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="field-card" data-required-group>
+            <legend><div class="bilingual"><p class="question-title en">4. Years of Experience in Data-related Roles <span class="required-mark">*</span></p><p class="question-title ar" lang="ar" dir="rtl">4. سنوات الخبرة في المجالات المتعلقة بالبيانات <span class="required-mark">*</span></p></div></legend>
+            <div class="option-grid">
+              <label class="option"><input type="radio" name="experience_years" value="lt1"><span class="option-copy"><span>Less than 1 year</span><span class="ar">أقل من سنة</span></span></label>
+              <label class="option"><input type="radio" name="experience_years" value="1_3"><span class="option-copy"><span>1–3 years</span><span class="ar">1–3 سنوات</span></span></label>
+              <label class="option"><input type="radio" name="experience_years" value="4_6"><span class="option-copy"><span>4–6 years</span><span class="ar">4–6 سنوات</span></span></label>
+              <label class="option"><input type="radio" name="experience_years" value="7_10"><span class="option-copy"><span>7–10 years</span><span class="ar">7–10 سنوات</span></span></label>
+              <label class="option"><input type="radio" name="experience_years" value="gt10"><span class="option-copy"><span>More than 10 years</span><span class="ar">أكثر من 10 سنوات</span></span></label>
+            </div><p class="validation-message" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="field-card" data-required-group>
+            <legend><div class="bilingual"><p class="question-title en">5. Practical Experience with Data Lakehouse <span class="required-mark">*</span></p><p class="question-title ar" lang="ar" dir="rtl">5. الخبرة العملية مع Data Lakehouse <span class="required-mark">*</span></p></div></legend>
+            <div class="option-grid">
+              <label class="option"><input type="radio" name="lakehouse_experience" value="none"><span class="option-copy"><span>No practical experience</span><span class="ar">لا توجد خبرة عملية</span></span></label>
+              <label class="option"><input type="radio" name="lakehouse_experience" value="theoretical"><span class="option-copy"><span>Basic theoretical knowledge</span><span class="ar">معرفة نظرية أساسية</span></span></label>
+              <label class="option"><input type="radio" name="lakehouse_experience" value="limited"><span class="option-copy"><span>Limited hands-on experience</span><span class="ar">خبرة عملية محدودة</span></span></label>
+              <label class="option"><input type="radio" name="lakehouse_experience" value="moderate"><span class="option-copy"><span>Moderate hands-on experience</span><span class="ar">خبرة عملية متوسطة</span></span></label>
+              <label class="option"><input type="radio" name="lakehouse_experience" value="extensive"><span class="option-copy"><span>Extensive hands-on experience</span><span class="ar">خبرة عملية واسعة</span></span></label>
+              <label class="option"><input type="radio" name="lakehouse_experience" value="expert"><span class="option-copy"><span>Expert / Architect-level experience</span><span class="ar">خبير / خبرة بمستوى معماري</span></span></label>
+            </div><p class="validation-message" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="field-card" data-required-group>
+            <legend><div class="bilingual"><p class="question-title en">6. Organization / Work Environment <span class="required-mark">*</span></p><p class="question-title ar" lang="ar" dir="rtl">6. نوع المنظمة / بيئة العمل <span class="required-mark">*</span></p></div></legend>
+            <div class="option-grid">
+              <label class="option"><input type="radio" name="organization_type" value="government"><span class="option-copy"><span>Government</span><span class="ar">حكومي</span></span></label>
+              <label class="option"><input type="radio" name="organization_type" value="semi_government"><span class="option-copy"><span>Semi-government / Government-owned</span><span class="ar">شبه حكومي / مملوك للحكومة</span></span></label>
+              <label class="option"><input type="radio" name="organization_type" value="private"><span class="option-copy"><span>Private Sector</span><span class="ar">القطاع الخاص</span></span></label>
+              <label class="option"><input type="radio" name="organization_type" value="consulting"><span class="option-copy"><span>Consulting</span><span class="ar">استشارات</span></span></label>
+              <label class="option"><input type="radio" name="organization_type" value="education"><span class="option-copy"><span>Education / Research</span><span class="ar">تعليم / بحث</span></span></label>
+              <label class="option"><input type="radio" name="organization_type" value="other" data-other-controller="#organization_other"><span class="option-copy"><span>Other</span><span class="ar">أخرى</span></span></label>
+            </div><div class="other-input-wrap"><label class="input-label" for="organization_other">Please specify / يرجى التوضيح</label><input id="organization_other" name="organization_other" type="text" disabled></div><p class="validation-message" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="field-card" data-required-group>
+            <legend><div class="bilingual"><p class="question-title en">7. Main Data Use Cases <span class="required-mark">*</span> <span class="optional-label">(Select all that apply)</span></p><p class="question-title ar" lang="ar" dir="rtl">7. أهم استخدامات البيانات <span class="required-mark">*</span> <span class="optional-label">(اختر كل ما ينطبق)</span></p></div></legend>
+            <div class="option-grid">
+              <label class="option"><input type="checkbox" name="use_cases" value="reporting"><span class="option-copy"><span>Reporting / Dashboards</span><span class="ar">التقارير / لوحات المعلومات</span></span></label>
+              <label class="option"><input type="checkbox" name="use_cases" value="bi"><span class="option-copy"><span>Business Intelligence</span><span class="ar">ذكاء الأعمال</span></span></label>
+              <label class="option"><input type="checkbox" name="use_cases" value="advanced_analytics"><span class="option-copy"><span>Advanced Analytics</span><span class="ar">التحليلات المتقدمة</span></span></label>
+              <label class="option"><input type="checkbox" name="use_cases" value="ml_ai"><span class="option-copy"><span>Machine Learning / AI</span><span class="ar">تعلم الآلة / الذكاء الاصطناعي</span></span></label>
+              <label class="option"><input type="checkbox" name="use_cases" value="realtime"><span class="option-copy"><span>Real-time Analytics</span><span class="ar">التحليلات اللحظية</span></span></label>
+              <label class="option"><input type="checkbox" name="use_cases" value="integration"><span class="option-copy"><span>Data Integration</span><span class="ar">تكامل البيانات</span></span></label>
+              <label class="option"><input type="checkbox" name="use_cases" value="compliance"><span class="option-copy"><span>Regulatory / Compliance Reporting</span><span class="ar">التقارير التنظيمية / الامتثال</span></span></label>
+              <label class="option"><input type="checkbox" name="use_cases" value="operational"><span class="option-copy"><span>Operational Data Processing</span><span class="ar">معالجة البيانات التشغيلية</span></span></label>
+              <label class="option"><input type="checkbox" name="use_cases" value="other" data-other-controller="#use_cases_other"><span class="option-copy"><span>Other</span><span class="ar">أخرى</span></span></label>
+            </div><div class="other-input-wrap"><label class="input-label" for="use_cases_other">Please specify / يرجى التوضيح</label><input id="use_cases_other" name="use_cases_other" type="text" disabled></div><p class="validation-message" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="field-card" data-required-group>
+            <legend><div class="bilingual"><p class="question-title en">8. Types of Data <span class="required-mark">*</span> <span class="optional-label">(Select all that apply)</span></p><p class="question-title ar" lang="ar" dir="rtl">8. أنواع البيانات <span class="required-mark">*</span> <span class="optional-label">(اختر كل ما ينطبق)</span></p></div></legend>
+            <div class="option-grid">
+              <label class="option"><input type="checkbox" name="data_types" value="structured"><span class="option-copy"><span>Structured Data</span><span class="ar">بيانات منظمة</span></span></label>
+              <label class="option"><input type="checkbox" name="data_types" value="semi_structured"><span class="option-copy"><span>Semi-structured Data</span><span class="ar">بيانات شبه منظمة</span></span></label>
+              <label class="option"><input type="checkbox" name="data_types" value="unstructured"><span class="option-copy"><span>Unstructured Data</span><span class="ar">بيانات غير منظمة</span></span></label>
+              <label class="option"><input type="checkbox" name="data_types" value="streaming"><span class="option-copy"><span>Streaming / Event Data</span><span class="ar">بيانات تدفق / أحداث</span></span></label>
+              <label class="option"><input type="checkbox" name="data_types" value="other" data-other-controller="#data_types_other"><span class="option-copy"><span>Other</span><span class="ar">أخرى</span></span></label>
+            </div><div class="other-input-wrap"><label class="input-label" for="data_types_other">Please specify / يرجى التوضيح</label><input id="data_types_other" name="data_types_other" type="text" disabled></div><p class="validation-message" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="field-card" data-required-group>
+            <legend><div class="bilingual"><p class="question-title en">9. Batch / Streaming <span class="required-mark">*</span></p><p class="question-title ar" lang="ar" dir="rtl">9. المعالجة بالدفعات / المعالجة اللحظية <span class="required-mark">*</span></p></div></legend>
+            <div class="option-grid">
+              <label class="option"><input type="radio" name="processing_mode" value="batch"><span class="option-copy"><span>Batch Processing</span><span class="ar">المعالجة بالدفعات</span></span></label>
+              <label class="option"><input type="radio" name="processing_mode" value="streaming"><span class="option-copy"><span>Streaming / Real-time Processing</span><span class="ar">المعالجة اللحظية / المتدفقة</span></span></label>
+              <label class="option"><input type="radio" name="processing_mode" value="both"><span class="option-copy"><span>Both</span><span class="ar">كلاهما</span></span></label>
+            </div><p class="validation-message" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="field-card" data-required-group>
+            <legend><div class="bilingual"><p class="question-title en">10. Approximate Data Volume <span class="required-mark">*</span></p><p class="question-title ar" lang="ar" dir="rtl">10. الحجم التقريبي للبيانات <span class="required-mark">*</span></p></div></legend>
+            <div class="option-grid">
+              <label class="option"><input type="radio" name="data_volume" value="lt100gb"><span class="option-copy"><span>Less than 100 GB</span><span class="ar">أقل من 100 جيجابايت</span></span></label>
+              <label class="option"><input type="radio" name="data_volume" value="100gb_1tb"><span class="option-copy"><span>100 GB – less than 1 TB</span><span class="ar">100 جيجابايت – أقل من 1 تيرابايت</span></span></label>
+              <label class="option"><input type="radio" name="data_volume" value="1_10tb"><span class="option-copy"><span>1 TB – less than 10 TB</span><span class="ar">1 تيرابايت – أقل من 10 تيرابايت</span></span></label>
+              <label class="option"><input type="radio" name="data_volume" value="10_100tb"><span class="option-copy"><span>10 TB – less than 100 TB</span><span class="ar">10 تيرابايت – أقل من 100 تيرابايت</span></span></label>
+              <label class="option"><input type="radio" name="data_volume" value="100tb_1pb"><span class="option-copy"><span>100 TB – less than 1 PB</span><span class="ar">100 تيرابايت – أقل من 1 بيتابايت</span></span></label>
+              <label class="option"><input type="radio" name="data_volume" value="1pb_plus"><span class="option-copy"><span>1 PB or more</span><span class="ar">1 بيتابايت أو أكثر</span></span></label>
+              <label class="option"><input type="radio" name="data_volume" value="not_sure"><span class="option-copy"><span>Not sure</span><span class="ar">غير متأكد</span></span></label>
+            </div><p class="validation-message" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="field-card" data-required-group>
+            <legend><div class="bilingual"><p class="question-title en">11. Data Domain / Business Field <span class="required-mark">*</span> <span class="optional-label">(Select all that apply)</span></p><p class="question-title ar" lang="ar" dir="rtl">11. مجال البيانات / قطاع الأعمال <span class="required-mark">*</span> <span class="optional-label">(اختر كل ما ينطبق)</span></p></div></legend>
+            <div class="option-grid">
+              <label class="option"><input type="checkbox" name="data_domains" value="banking"><span class="option-copy"><span>Banking / Financial Services</span><span class="ar">البنوك / الخدمات المالية</span></span></label>
+              <label class="option"><input type="checkbox" name="data_domains" value="government"><span class="option-copy"><span>Government / Public Sector</span><span class="ar">الحكومة / القطاع العام</span></span></label>
+              <label class="option"><input type="checkbox" name="data_domains" value="telecom"><span class="option-copy"><span>Telecommunications</span><span class="ar">الاتصالات</span></span></label>
+              <label class="option"><input type="checkbox" name="data_domains" value="healthcare"><span class="option-copy"><span>Healthcare</span><span class="ar">الرعاية الصحية</span></span></label>
+              <label class="option"><input type="checkbox" name="data_domains" value="retail"><span class="option-copy"><span>Retail / E-commerce</span><span class="ar">التجزئة / التجارة الإلكترونية</span></span></label>
+              <label class="option"><input type="checkbox" name="data_domains" value="technology"><span class="option-copy"><span>Technology</span><span class="ar">التقنية</span></span></label>
+              <label class="option"><input type="checkbox" name="data_domains" value="energy"><span class="option-copy"><span>Energy / Utilities</span><span class="ar">الطاقة / المرافق</span></span></label>
+              <label class="option"><input type="checkbox" name="data_domains" value="consulting"><span class="option-copy"><span>Consulting</span><span class="ar">الاستشارات</span></span></label>
+              <label class="option"><input type="checkbox" name="data_domains" value="education"><span class="option-copy"><span>Education / Research</span><span class="ar">التعليم / البحث</span></span></label>
+              <label class="option"><input type="checkbox" name="data_domains" value="other" data-other-controller="#data_domains_other"><span class="option-copy"><span>Other</span><span class="ar">أخرى</span></span></label>
+            </div><div class="other-input-wrap"><label class="input-label" for="data_domains_other">Please specify / يرجى التوضيح</label><input id="data_domains_other" name="data_domains_other" type="text" disabled></div><p class="validation-message" role="alert"></p>
+          </fieldset>
+        </div>
+
+        <div class="form-actions">
+          <a class="button secondary" data-preserve-query href="index.html">Back / رجوع</a>
+          <span class="saved-state" data-saved-state aria-live="polite">Not saved yet / لم يتم الحفظ بعد</span>
+          <button class="button" type="submit">Continue to Tools / المتابعة إلى الأدوات</button>
+        </div>
+      </form>
+    </main>
+
+    <footer class="site-footer"><div class="footer-inner"><p>Master’s Thesis Research Project — not an official university institutional system.</p><p>Participant reference: <span data-participant-reference></span></p></div></footer>
+    <script defer src="js/config.js"></script>
+    <script defer src="js/backend.js"></script>
+    <script defer src="js/validation.js"></script>
+    <script defer src="js/app.js"></script>
+  </body>
+</html>
