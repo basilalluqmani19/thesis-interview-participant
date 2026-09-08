@@ -103,6 +103,13 @@ a {
   border-radius: 5px;
 }
 
+.university-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .identity .eyebrow,
 .page-eyebrow,
 .question-number,

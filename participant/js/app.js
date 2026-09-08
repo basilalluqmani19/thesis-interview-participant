@@ -4,8 +4,9 @@
   const STORAGE_KEY = "thesisInterviewForms.v2";
   let backend;
   let state = { forms: {} };
-  let saveTimer;
-  let saveQueue = Promise.resolve();
+  let currentFormDirty = false;
+  let currentFormVersion = 0;
+  let savePending = null;
   let navigationPending = false;
 
   function formStorage() {
@@ -76,33 +77,37 @@
       waiting: "Not saved yet / لم يتم الحفظ بعد",
       saving: "Saving… / جارٍ الحفظ…",
       saved: "Saved ✓ / تم الحفظ ✓",
-      error: "Save failed — retry on next change / تعذر الحفظ — ستتم المحاولة عند التغيير التالي"
+      error: "Save failed — please try again / تعذر الحفظ — يرجى المحاولة مرة أخرى"
     };
     document.querySelectorAll("[data-saved-state]").forEach((indicator) => {
       indicator.textContent = copy[status] || copy.waiting;
       indicator.classList.toggle("save-error", status === "error");
     });
   }
-  function snapshotForm(form) {
+  function storeSavedPage(form, pageData) {
     bindStateToBackendSession();
     state.forms = state.forms || {};
-    state.forms[form.dataset.prototypeForm] = formToObject(form);
+    state.forms[form.dataset.prototypeForm] = pageData;
     state.updatedAt = new Date().toISOString();
     writeState(state);
-    return state.forms;
   }
   function saveForm(form) {
-    const forms = snapshotForm(form);
+    if (savePending) return savePending;
+    const page = form.dataset.prototypeForm;
+    const pageData = formToObject(form);
+    const capturedVersion = currentFormVersion;
     updateSavedIndicator("saving");
-    saveQueue = saveQueue.catch(() => {}).then(() => backend.save(forms)).then((result) => {
-      updateSavedIndicator("saved"); initializeAudioSection(); return result;
-    }).catch((error) => { updateSavedIndicator("error"); throw error; });
-    return saveQueue;
-  }
-  function scheduleSave(form, delay) {
-    updateSavedIndicator("saving");
-    window.clearTimeout(saveTimer);
-    saveTimer = window.setTimeout(() => saveForm(form).catch(() => {}), delay || 900);
+    savePending = backend.save(page, pageData).then((result) => {
+      storeSavedPage(form, pageData);
+      if (currentFormVersion === capturedVersion) currentFormDirty = false;
+      updateSavedIndicator("saved");
+      initializeAudioSection();
+      return result;
+    }).catch((error) => {
+      updateSavedIndicator("error");
+      throw error;
+    }).finally(() => { savePending = null; });
+    return savePending;
   }
   function preserveQueryParameters() {
     const current = new URLSearchParams(window.location.search);
@@ -119,7 +124,7 @@
     navigateTo(target.href);
   }
   function navigateTo(href) {
-    if (backend && backend.mode === "public") window.InterviewBackend.preparePublicNavigation(backend.session, href);
+    if (backend) backend.prepareNavigation(href);
     window.location.href = href;
   }
   function enforceStartRoute(session) {
@@ -159,10 +164,8 @@
     }));
   }
   function initializeParticipantMode(session) {
-    const reference = session.participantReference || (backend.mode === "public" ? "Public interview / مقابلة عامة" : "Private interview / مقابلة خاصة");
-    document.querySelectorAll("[data-participant-reference]").forEach((element) => { element.textContent = reference; });
     document.querySelectorAll("[data-public-only]").forEach((element) => { element.hidden = backend.mode !== "public"; });
-    document.querySelectorAll("[data-reset-prototype]").forEach((element) => { element.hidden = backend.mode !== "public"; });
+    document.querySelectorAll("[data-reset-prototype], [data-public-success-action]").forEach((element) => { element.hidden = true; });
   }
   function initializeConsent(form) {
     const startButton = document.querySelector("[data-start-interview]");
@@ -181,7 +184,7 @@
       startButton.disabled = true;
       try {
         const consent = formToObject(form);
-        snapshotForm(form);
+        updateSavedIndicator("saving");
         await backend.start(consent);
         adoptSessionState(backend.session);
         updateSavedIndicator("saved");
@@ -190,16 +193,35 @@
       catch (error) { updateSavedIndicator("error"); startButton.disabled = false; }
     });
   }
+  function updateContinueState(form) {
+    const button = form.querySelector("button[type=submit]");
+    if (!button) return;
+    const complete = window.PrototypeValidation.isFormComplete(form);
+    if (complete) button.removeAttribute("aria-disabled");
+    else button.setAttribute("aria-disabled", "true");
+  }
+  function markFormChanged(form) {
+    currentFormDirty = true;
+    currentFormVersion += 1;
+    updateContinueState(form);
+  }
   function initializeStandardForm(form) {
     if (!form.dataset.nextPage) return;
+    updateContinueState(form);
+    form.addEventListener("input", () => markFormChanged(form));
+    form.addEventListener("change", () => markFormChanged(form));
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
+      if (navigationPending) return;
       const result = window.PrototypeValidation.validateForm(form);
       const summary = document.querySelector("[data-error-summary]");
       if (!result.valid) { if (summary) { summary.hidden = false; const count = summary.querySelector("[data-error-count]"); if (count) count.textContent = result.invalidCount; } return; }
       if (summary) summary.hidden = true;
-      const button = form.querySelector("button[type=submit]"); button.disabled = true;
-      try { await saveForm(form); navigateWithQuery(form.dataset.nextPage); } catch (error) { button.disabled = false; }
+      navigationPending = true;
+      const button = form.querySelector("button[type=submit]");
+      button.setAttribute("aria-busy", "true");
+      try { await saveForm(form); navigateWithQuery(form.dataset.nextPage); }
+      catch (error) { navigationPending = false; button.removeAttribute("aria-busy"); updateContinueState(form); }
     });
   }
   function initializeWorkflowNavigation(form) {
@@ -208,8 +230,8 @@
       if (!window.InterviewBackend.shouldSaveBeforeNavigation(backend.session, window.location.href, target.href)) return;
       event.preventDefault();
       if (navigationPending || !form) return;
+      if (!currentFormDirty) { navigateTo(target.href); return; }
       navigationPending = true;
-      window.clearTimeout(saveTimer);
       try {
         await saveForm(form);
         navigateTo(target.href);
@@ -238,17 +260,42 @@
       link.removeAttribute("aria-disabled");
     }
   }
+  async function startNewPublicResponse(button) {
+    button.disabled = true;
+    clearStoredState();
+    try {
+      await backend.beginNewPublicResponse();
+      state = { forms: {}, sessionIdentity: backend.session.sessionIdentity };
+      writeState(state);
+      const target = new URL("index.html?mode=public", window.location.href);
+      backend.prepareNavigation(target.href);
+      window.location.href = target.href;
+    } catch (error) {
+      button.disabled = false;
+      updateSavedIndicator("error");
+      throw error;
+    }
+  }
   function initializeNewPublicResponse() {
-    document.querySelectorAll("[data-reset-prototype]").forEach((button) => button.addEventListener("click", () => {
+    document.querySelectorAll("[data-reset-prototype]").forEach((button) => button.addEventListener("click", async () => {
       if (!window.confirm("Start a new public response? / هل تريد بدء إجابة عامة جديدة؟")) return;
-      clearStoredState(); window.InterviewBackend.clearSession();
-      window.location.href = new URL("index.html?mode=public", window.location.href).href;
+      try { await startNewPublicResponse(button); } catch (error) { /* The visible save-error state allows a safe retry. */ }
     }));
+  }
+  function showSubmissionSuccess() {
+    const success = document.querySelector("[data-submission-success]");
+    if (!success) return null;
+    success.hidden = false;
+    const showNewPublicResponse = window.InterviewBackend.shouldOfferNewPublicResponse(backend.mode, backend.session);
+    const action = success.querySelector("[data-public-success-action]");
+    const button = success.querySelector("[data-reset-prototype]");
+    if (action) action.hidden = !showNewPublicResponse;
+    if (button) button.hidden = !showNewPublicResponse;
+    return success;
   }
   function lockCompleted(form) {
     form.querySelectorAll("input, textarea, select, button[type=submit]").forEach((control) => { control.disabled = true; });
-    const success = document.querySelector("[data-submission-success]");
-    if (success) { success.hidden = false; success.querySelector("h3").textContent = "Interview submitted / تم إرسال المقابلة"; }
+    showSubmissionSuccess();
   }
   function showConnectionError(error) {
     const main = document.querySelector("main");
@@ -272,24 +319,34 @@
       const forms = Array.from(document.querySelectorAll("form[data-prototype-form]"));
       forms.forEach((form) => {
         restoreForm(form); initializeOtherFields(form); initializeNoneOptions(form);
-        if (form.id === "consentForm") initializeConsent(form);
+        if (form.id === "consentForm") {
+          initializeConsent(form);
+          form.addEventListener("input", () => markFormChanged(form));
+          form.addEventListener("change", () => markFormChanged(form));
+        }
         else {
-          form.addEventListener("input", () => scheduleSave(form, 1000));
-          form.addEventListener("change", () => scheduleSave(form, 180));
           if (form.id !== "interviewForm") initializeStandardForm(form);
+          else {
+            form.addEventListener("input", () => markFormChanged(form));
+            form.addEventListener("change", () => markFormChanged(form));
+          }
         }
         if (session.completed) lockCompleted(form);
       });
       initializeWorkflowNavigation(forms[0] || null);
       initializeAudioSection(); initializeNewPublicResponse();
-      updateSavedIndicator(window.InterviewBackend.shouldShowSaved(session) ? "saved" : "waiting");
+      updateSavedIndicator("waiting");
       document.dispatchEvent(new CustomEvent("thesis:app-ready", { detail: { completed: Boolean(session.completed) } }));
     } catch (error) { showConnectionError(error); }
   }
   window.PrototypeApp = {
-    STORAGE_KEY, formToObject, navigateWithQuery, readState: () => state, saveForm,
+    STORAGE_KEY, formToObject, navigateWithQuery, readState: () => state, saveForm, showSubmissionSuccess,
     submitInterview: async (form, submissionKey) => {
-      snapshotForm(form);
+      bindStateToBackendSession();
+      state.forms = state.forms || {};
+      state.forms[form.dataset.prototypeForm] = formToObject(form);
+      state.updatedAt = new Date().toISOString();
+      writeState(state);
       const result = await backend.submit(state.forms, submissionKey);
       state = { forms: {}, sessionIdentity: backend.session.sessionIdentity, completed: true, participantReference: backend.session.participantReference };
       clearStoredState();

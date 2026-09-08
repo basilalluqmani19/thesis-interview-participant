@@ -1,3 +1,3 @@
-# University logo placeholder
+# University logo asset
 
-Place the approved university logo file in this directory later, then replace the `.logo-placeholder` element in each participant page with an `<img>` element. No unofficial logo is included in this prototype.
+`imamu-university-logo.png` is the official university logo supplied for this project and used in the participant page headers.

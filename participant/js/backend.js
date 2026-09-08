@@ -3,6 +3,7 @@
 
   const SESSION_KEY = "thesisInterviewSession.v2";
   const NAVIGATION_HANDOFF_KEY = "thesisInterviewNavigation.v1";
+  const PRIVATE_NAVIGATION_HANDOFF_KEY = "thesisInterviewPrivateNavigation.v1";
   const NAVIGATION_HANDOFF_MS = 120000;
 
   function hasOwn(object, key) {
@@ -47,11 +48,20 @@
   }
 
   function canResumePublicSession(cached, backendUrl) {
+    if (!canRestorePublicNavigationSession(cached, backendUrl)) return false;
+    return cached.status === "IN_PROGRESS";
+  }
+
+  function canRestorePublicNavigationSession(cached, backendUrl) {
     if (!plainObject(cached) || cached.backendUrl !== backendUrl || cached.sourceType !== "PUBLIC") return false;
     if (typeof cached.token !== "string" || !cached.token || typeof cached.participantReference !== "string" || !/^PUB-/.test(cached.participantReference)) return false;
-    if (cached.status !== "IN_PROGRESS") return false;
+    if (!["NOT_STARTED", "IN_PROGRESS"].includes(cached.status)) return false;
     const expectedIdentity = sessionIdentity("PUBLIC", cached.participantReference, cached.token);
     return !cached.sessionIdentity || cached.sessionIdentity === expectedIdentity;
+  }
+
+  function shouldOfferNewPublicResponse(mode, session) {
+    return mode === "public" && Boolean(session && session.status === "COMPLETED" && session.completed === true);
   }
 
   function restorePublicSession(cached, backendUrl) {
@@ -150,12 +160,16 @@
     } catch (error) { /* Same-tab navigation cache only. */ }
   }
   function clearSession() {
-    try { transientStorage().removeItem(SESSION_KEY); transientStorage().removeItem(NAVIGATION_HANDOFF_KEY); } catch (error) { /* Best effort. */ }
+    try {
+      transientStorage().removeItem(SESSION_KEY);
+      transientStorage().removeItem(NAVIGATION_HANDOFF_KEY);
+      transientStorage().removeItem(PRIVATE_NAVIGATION_HANDOFF_KEY);
+    } catch (error) { /* Best effort. */ }
     try { window.localStorage.removeItem(SESSION_KEY); } catch (error) { /* Remove legacy cache when possible. */ }
   }
 
   function publicNavigationHandoff(session, targetHref, now) {
-    if (!session || session.sourceType !== "PUBLIC" || session.status !== "IN_PROGRESS" || !session.token || !session.participantReference) return null;
+    if (!canRestorePublicNavigationSession(session, session && session.backendUrl)) return null;
     const target = new URL(String(targetHref));
     return {
       sessionIdentity: sessionIdentity("PUBLIC", session.participantReference, session.token),
@@ -165,7 +179,7 @@
   }
 
   function validPublicNavigationHandoff(cached, handoff, currentHref, backendUrl, now) {
-    if (!canResumePublicSession(cached, backendUrl) || !plainObject(handoff)) return false;
+    if (!canRestorePublicNavigationSession(cached, backendUrl) || !plainObject(handoff)) return false;
     const current = new URL(String(currentHref));
     const expectedIdentity = sessionIdentity("PUBLIC", cached.participantReference, cached.token);
     return handoff.sessionIdentity === expectedIdentity && handoff.destination === current.pathname + current.search && Number(handoff.expiresAt) >= Number(now || Date.now());
@@ -180,6 +194,63 @@
     } catch (error) {
       return false;
     }
+  }
+
+  function privateNavigationHandoff(session, token, targetHref, now) {
+    if (!session || session.sourceType !== "PRIVATE" || session.status !== "IN_PROGRESS" || !token || !session.participantReference) return null;
+    const target = new URL(String(targetHref));
+    return {
+      sessionIdentity: sessionIdentity("PRIVATE", session.participantReference, token),
+      destination: target.pathname + target.search,
+      expiresAt: Number(now || Date.now()) + NAVIGATION_HANDOFF_MS,
+      session: {
+        participantReference: session.participantReference,
+        sourceType: "PRIVATE",
+        status: "IN_PROGRESS",
+        startedAt: session.startedAt || "",
+        activeDurationSeconds: serverNumber(session, "activeDurationSeconds"),
+        completionCount: serverNumber(session, "completionCount"),
+        submittedAt: "",
+        draft: plainObject(session.forms) ? session.forms : {},
+        whatsAppUrl: session.whatsAppUrl || ""
+      }
+    };
+  }
+
+  function validPrivateNavigationHandoff(handoff, token, currentHref, backendUrl, now) {
+    if (!plainObject(handoff) || !plainObject(handoff.session) || !token) return false;
+    const current = new URL(String(currentHref));
+    const expectedIdentity = sessionIdentity("PRIVATE", handoff.session.participantReference, token);
+    return handoff.session.sourceType === "PRIVATE" && handoff.session.status === "IN_PROGRESS" &&
+      handoff.sessionIdentity === expectedIdentity && handoff.destination === current.pathname + current.search &&
+      Number(handoff.expiresAt) >= Number(now || Date.now()) && /^https:\/\//.test(backendUrl || "");
+  }
+
+  function preparePrivateNavigation(session, token, targetHref) {
+    try {
+      const handoff = privateNavigationHandoff(session, token, targetHref, Date.now());
+      if (!handoff) return false;
+      transientStorage().setItem(PRIVATE_NAVIGATION_HANDOFF_KEY, JSON.stringify(handoff));
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function consumePrivateNavigationHandoff(token, currentHref, backendUrl) {
+    var handoff = null;
+    try {
+      const storage = transientStorage();
+      handoff = JSON.parse(storage.getItem(PRIVATE_NAVIGATION_HANDOFF_KEY) || "null");
+      storage.removeItem(PRIVATE_NAVIGATION_HANDOFF_KEY);
+    } catch (error) { handoff = null; }
+    return validPrivateNavigationHandoff(handoff, token, currentHref, backendUrl, Date.now()) ? handoff.session : null;
+  }
+
+  function prepareSessionNavigation(session, token, targetHref) {
+    return session && session.sourceType === "PRIVATE"
+      ? preparePrivateNavigation(session, token, targetHref)
+      : preparePublicNavigation(session, targetHref);
   }
 
   function consumePublicNavigationHandoff(cached, currentHref, backendUrl) {
@@ -233,7 +304,11 @@
       this.pending.delete(message.requestId);
       window.clearTimeout(pending.timer);
       if (message.response && message.response.ok) pending.resolve(message.response.data);
-      else pending.reject(new Error(message.response && message.response.error ? message.response.error.message : "The request failed."));
+      else {
+        const failure = new Error(message.response && message.response.error ? message.response.error.message : "The request failed.");
+        failure.code = message.response && message.response.error ? message.response.error.code : "REQUEST_FAILED";
+        pending.reject(failure);
+      }
     }
     request(action, payload) {
       const run = () => this.post(action, payload);
@@ -244,7 +319,13 @@
     post(action, payload) {
       const requestId = randomId();
       return new Promise((resolve, reject) => {
-        const timer = window.setTimeout(() => { this.pending.delete(requestId); reject(new Error("The interview service request timed out.")); }, 30000);
+        const timeoutMs = action === "submitInterview" ? 45000 : 30000;
+        const timer = window.setTimeout(() => {
+          this.pending.delete(requestId);
+          const failure = new Error("The interview service request timed out.");
+          failure.code = "REQUEST_TIMEOUT";
+          reject(failure);
+        }, timeoutMs);
         this.pending.set(requestId, { resolve, reject, timer });
         const form = document.createElement("form");
         form.method = "POST"; form.action = this.url; form.target = this.frame.name; form.hidden = true;
@@ -273,11 +354,15 @@
       if (!this.configured()) throw new Error("The public interview backend has not been configured yet.");
       this.bridge = new BridgeClient(this.config.PUBLIC_BACKEND_URL);
       if (this.mode === "private") {
-        const validated = await this.bridge.request("validatePrivateToken", { token: this.token });
-        this.applySession(validated);
-        const opened = await this.bridge.request("recordFirstOpen", { token: this.token });
-        this.applySession(opened);
-      } else if (canResumePublicSession(this.cachedSession, this.config.PUBLIC_BACKEND_URL) && consumePublicNavigationHandoff(this.cachedSession, window.location.href, this.config.PUBLIC_BACKEND_URL)) {
+        const handedSession = consumePrivateNavigationHandoff(this.token, window.location.href, this.config.PUBLIC_BACKEND_URL);
+        if (handedSession) {
+          this.applySession(handedSession);
+        } else {
+          const action = participantPageName(window.location.href) === "index.html" ? "recordFirstOpen" : "validatePrivateToken";
+          const validated = await this.bridge.request(action, { token: this.token });
+          this.applySession(validated);
+        }
+      } else if (canRestorePublicNavigationSession(this.cachedSession, this.config.PUBLIC_BACKEND_URL) && consumePublicNavigationHandoff(this.cachedSession, window.location.href, this.config.PUBLIC_BACKEND_URL)) {
         this.token = this.cachedSession.token;
         this.session = restorePublicSession(this.cachedSession, this.config.PUBLIC_BACKEND_URL);
         this.activeSeconds = this.session.activeDurationSeconds;
@@ -336,6 +421,27 @@
       this.applySession(created);
       return this.session;
     }
+    async beginNewPublicResponse() {
+      if (this.mode !== "public") throw new Error("A new public response is available only from the public interview.");
+      this.stopDurationTracking();
+      clearSession();
+      this.token = "";
+      this.cachedSession = {};
+      this.session = {};
+      this.activeSeconds = 0;
+      const created = await this.bridge.request("createPublicSession", { publicName: "" });
+      const newToken = String((created && created.sessionToken) || "");
+      if (!newToken) throw new Error("A new public response could not be created.");
+      this.token = newToken;
+      this.applySession(created);
+      if (this.session.sourceType !== "PUBLIC" || this.session.status !== "NOT_STARTED" || this.session.completed) {
+        this.token = "";
+        this.session = {};
+        clearSession();
+        throw new Error("A new public response could not be created.");
+      }
+      return this.session;
+    }
     async start(consent) {
       const values = plainObject(consent) ? consent : {};
       await this.ensureSession(values.public_name || "");
@@ -346,10 +452,20 @@
       if (shouldTrackDuration(this.session)) this.startDurationTracking();
       return result;
     }
-    async save(forms) {
+    prepareNavigation(targetHref) {
+      if (shouldTrackDuration(this.session)) {
+        this.session.activeDurationSeconds = this.activeDuration();
+        if (this.mode === "public") writeSession(this.session);
+      }
+      return prepareSessionNavigation(this.session, this.token, targetHref);
+    }
+    async save(page, pageData) {
       if (!this.token || !shouldTrackDuration(this.session)) throw new Error("Start the interview before saving a response.");
-      const result = await this.bridge.request("saveDraft", { token: this.token, data: forms, activeDurationSeconds: this.activeDuration() });
-      this.session.forms = forms;
+      const data = {};
+      data[page] = pageData;
+      const result = await this.bridge.request("saveDraft", { token: this.token, page, data, activeDurationSeconds: this.activeDuration() });
+      this.session.forms = plainObject(this.session.forms) ? this.session.forms : {};
+      this.session.forms[page] = pageData;
       this.session.activeDurationSeconds = this.activeDuration();
       this.session.completionCount = result.completionCount;
       this.session.whatsAppUrl = String(result.whatsAppUrl || "");
@@ -358,7 +474,24 @@
     }
     async submit(forms, submissionKey) {
       if (!this.token || !shouldTrackDuration(this.session)) throw new Error("Start the interview before submitting a response.");
-      const result = await this.bridge.request("submitInterview", { token: this.token, data: forms, activeDurationSeconds: this.activeDuration(), submissionKey });
+      const payload = { token: this.token, data: forms, activeDurationSeconds: this.activeDuration(), submissionKey };
+      var result;
+      try {
+        result = await this.bridge.request("submitInterview", payload);
+      } catch (error) {
+        if (!this.isUncertainSubmissionError(error)) throw error;
+        try {
+          const status = await this.bridge.request("getSubmissionStatus", { token: this.token, submissionKey });
+          if (status.status !== "COMPLETED") throw error;
+          result = status;
+        } catch (statusError) {
+          if (statusError === error || statusError.code === "ALREADY_SUBMITTED") throw statusError;
+          const unconfirmed = new Error("Submission could not be confirmed. Please try Submit again. / تعذر تأكيد الإرسال. يرجى محاولة الإرسال مرة أخرى.");
+          unconfirmed.code = "SUBMISSION_UNCONFIRMED";
+          throw unconfirmed;
+        }
+      }
+      if (!result || result.status !== "COMPLETED") throw new Error("The interview was not completed.");
       this.stopDurationTracking();
       this.session = completedClientSession(this.session, result);
       this.token = "";
@@ -366,7 +499,10 @@
       clearSession();
       return result;
     }
+    isUncertainSubmissionError(error) {
+      return !error || !error.code || ["REQUEST_TIMEOUT", "REQUEST_FAILED", "SERVER_ERROR", "BUSY"].includes(error.code);
+    }
   }
 
-  window.InterviewBackend = { InterviewBackend, SESSION_KEY, NAVIGATION_HANDOFF_KEY, readSession, writeSession, clearSession, shouldTrackDuration, shouldRedirectToWelcome, shouldRedirectCompletedToInterview, welcomeUrl, interviewUrl, shouldSaveBeforeNavigation, shouldShowSaved, buildAuthoritativeSession, canResumePublicSession, restorePublicSession, publicNavigationHandoff, validPublicNavigationHandoff, preparePublicNavigation, completedClientSession, sessionIdentity };
+  window.InterviewBackend = { InterviewBackend, SESSION_KEY, NAVIGATION_HANDOFF_KEY, PRIVATE_NAVIGATION_HANDOFF_KEY, readSession, writeSession, clearSession, shouldTrackDuration, shouldRedirectToWelcome, shouldRedirectCompletedToInterview, welcomeUrl, interviewUrl, shouldSaveBeforeNavigation, shouldShowSaved, shouldOfferNewPublicResponse, buildAuthoritativeSession, canResumePublicSession, canRestorePublicNavigationSession, restorePublicSession, publicNavigationHandoff, validPublicNavigationHandoff, preparePublicNavigation, privateNavigationHandoff, validPrivateNavigationHandoff, preparePrivateNavigation, prepareSessionNavigation, completedClientSession, sessionIdentity };
 })();

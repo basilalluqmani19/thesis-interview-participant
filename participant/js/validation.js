@@ -30,6 +30,23 @@
     form.querySelectorAll("[aria-invalid='true']").forEach((element) => element.removeAttribute("aria-invalid"));
   }
 
+  function isFormComplete(form) {
+    const requiredGroupsComplete = Array.from(form.querySelectorAll("[data-required-group]")).every((group) => {
+      if (group.hidden || group.closest("[hidden]")) return true;
+      const selectable = Array.from(group.querySelectorAll("input[type='radio'], input[type='checkbox']")).filter((input) => !input.disabled);
+      return selectable.some((input) => input.checked);
+    });
+    const requiredFieldsComplete = Array.from(form.querySelectorAll("[data-required-field]")).every((field) => {
+      return field.disabled || field.hidden || field.closest("[hidden]") || Boolean(String(field.value || "").trim());
+    });
+    const requiredOtherComplete = Array.from(form.querySelectorAll("[data-other-controller]")).every((controller) => {
+      if (!controller.checked) return true;
+      const target = form.querySelector(controller.dataset.otherController);
+      return Boolean(target && String(target.value || "").trim());
+    });
+    return requiredGroupsComplete && requiredFieldsComplete && requiredOtherComplete;
+  }
+
   function validateForm(form, options) {
     const settings = Object.assign({ scroll: true, focus: true }, options || {});
     const invalidContainers = [];
@@ -88,6 +105,7 @@
 
   window.PrototypeValidation = {
     clearErrors,
+    isFormComplete,
     markInvalid,
     validateForm
   };
