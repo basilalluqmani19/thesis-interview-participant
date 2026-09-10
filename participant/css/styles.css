@@ -560,28 +560,6 @@ a:focus-visible {
   cursor: not-allowed;
 }
 
-.saved-state {
-  display: inline-flex;
-  gap: 0.4rem;
-  align-items: center;
-  color: var(--green);
-  font-size: 0.78rem;
-  font-weight: 700;
-}
-
-.saved-state.save-error {
-  color: var(--red);
-  font-weight: 650;
-}
-
-.saved-state::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  background: currentColor;
-  border-radius: 50%;
-}
-
 .prototype-note,
 .notice,
 .error-summary,
@@ -624,7 +602,12 @@ a:focus-visible {
 .notice[hidden],
 .error-summary[hidden],
 .success-panel[hidden],
-.audio-section[hidden] {
+.audio-section[hidden],
+.workflow-nav[hidden],
+.page-intro[hidden],
+.prototype-note[hidden],
+.question-progress[hidden],
+form[hidden] {
   display: none;
 }
 
