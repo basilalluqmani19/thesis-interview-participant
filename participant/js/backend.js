@@ -109,10 +109,6 @@
     return target.href;
   }
 
-  function shouldShowSaved(session) {
-    return Boolean(session && session.participantReference && session.token && (session.status === "IN_PROGRESS" || session.status === "COMPLETED"));
-  }
-
   function shouldRedirectCompletedToInterview(session, href) {
     return Boolean(session && session.sourceType === "PRIVATE" && session.status === "COMPLETED" && participantPageName(href) !== "interview.html");
   }
@@ -122,19 +118,6 @@
     const target = new URL("interview.html", current.href);
     target.search = current.search;
     return target.href;
-  }
-
-  function shouldSaveBeforeNavigation(session, currentHref, targetHref) {
-    if (!session || session.status !== "IN_PROGRESS") return false;
-    try {
-      const current = new URL(String(currentHref));
-      const target = new URL(String(targetHref), current.href);
-      if (current.origin !== target.origin) return false;
-      if (!["index.html", "background.html", "tools.html", "interview.html"].includes(participantPageName(target.href))) return false;
-      return !(current.pathname === target.pathname && current.search === target.search && target.hash);
-    } catch (error) {
-      return false;
-    }
   }
 
   function isAllowedBridgeOrigin(origin) {
@@ -275,7 +258,7 @@
       completed: true,
       forms: {},
       token: "",
-      whatsAppUrl: "",
+      whatsAppUrl: String((result && result.whatsAppUrl) || ""),
       activeDurationSeconds: 0,
       sessionIdentity: sessionIdentity(sourceType, participantReference, "")
     };
@@ -348,6 +331,7 @@
       this.session = {};
       this.activeSeconds = 0;
       this.lastTick = null;
+      this.submitTimings = [];
     }
     configured() { return /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec/.test(this.config.PUBLIC_BACKEND_URL || ""); }
     async initialize() {
@@ -460,6 +444,7 @@
       return prepareSessionNavigation(this.session, this.token, targetHref);
     }
     async save(page, pageData) {
+      // Compatibility endpoint only. The participant workflow keeps answers local until final Submit.
       if (!this.token || !shouldTrackDuration(this.session)) throw new Error("Start the interview before saving a response.");
       const data = {};
       data[page] = pageData;
@@ -475,13 +460,19 @@
     async submit(forms, submissionKey) {
       if (!this.token || !shouldTrackDuration(this.session)) throw new Error("Start the interview before submitting a response.");
       const payload = { token: this.token, data: forms, activeDurationSeconds: this.activeDuration(), submissionKey };
+      const totalStartedAt = Date.now();
       var result;
       try {
+        const primaryStartedAt = Date.now();
         result = await this.bridge.request("submitInterview", payload);
+        this.recordSubmitTiming("submitInterview", primaryStartedAt);
       } catch (error) {
+        this.recordSubmitTiming("submitInterview", totalStartedAt, error && error.code ? error.code : "ERROR");
         if (!this.isUncertainSubmissionError(error)) throw error;
         try {
+          const verificationStartedAt = Date.now();
           const status = await this.bridge.request("getSubmissionStatus", { token: this.token, submissionKey });
+          this.recordSubmitTiming("getSubmissionStatus", verificationStartedAt);
           if (status.status !== "COMPLETED") throw error;
           result = status;
         } catch (statusError) {
@@ -497,12 +488,20 @@
       this.token = "";
       this.activeSeconds = 0;
       clearSession();
+      this.recordSubmitTiming("total", totalStartedAt);
       return result;
+    }
+    recordSubmitTiming(step, startedAt, outcome) {
+      if (this.config.ENABLE_TEST_TIMING !== true) return;
+      this.submitTimings.push({ step, durationMs: Math.max(0, Date.now() - startedAt), outcome: outcome || "OK" });
+    }
+    getSubmitTimings() {
+      return this.config.ENABLE_TEST_TIMING === true ? this.submitTimings.slice() : [];
     }
     isUncertainSubmissionError(error) {
       return !error || !error.code || ["REQUEST_TIMEOUT", "REQUEST_FAILED", "SERVER_ERROR", "BUSY"].includes(error.code);
     }
   }
 
-  window.InterviewBackend = { InterviewBackend, SESSION_KEY, NAVIGATION_HANDOFF_KEY, PRIVATE_NAVIGATION_HANDOFF_KEY, readSession, writeSession, clearSession, shouldTrackDuration, shouldRedirectToWelcome, shouldRedirectCompletedToInterview, welcomeUrl, interviewUrl, shouldSaveBeforeNavigation, shouldShowSaved, shouldOfferNewPublicResponse, buildAuthoritativeSession, canResumePublicSession, canRestorePublicNavigationSession, restorePublicSession, publicNavigationHandoff, validPublicNavigationHandoff, preparePublicNavigation, privateNavigationHandoff, validPrivateNavigationHandoff, preparePrivateNavigation, prepareSessionNavigation, completedClientSession, sessionIdentity };
+  window.InterviewBackend = { InterviewBackend, SESSION_KEY, NAVIGATION_HANDOFF_KEY, PRIVATE_NAVIGATION_HANDOFF_KEY, readSession, writeSession, clearSession, shouldTrackDuration, shouldRedirectToWelcome, shouldRedirectCompletedToInterview, welcomeUrl, interviewUrl, shouldOfferNewPublicResponse, buildAuthoritativeSession, canResumePublicSession, canRestorePublicNavigationSession, restorePublicSession, publicNavigationHandoff, validPublicNavigationHandoff, preparePublicNavigation, privateNavigationHandoff, validPrivateNavigationHandoff, preparePrivateNavigation, prepareSessionNavigation, completedClientSession, sessionIdentity };
 })();
