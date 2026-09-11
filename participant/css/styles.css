@@ -707,6 +707,22 @@ form[hidden] {
   margin-bottom: 0.45rem;
 }
 
+.question-number-bilingual {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  direction: ltr;
+}
+
+.question-number-bilingual [lang="ar"] {
+  direction: rtl;
+  unicode-bidi: isolate;
+}
+
+.question-divider {
+  direction: ltr;
+}
+
 .question-head h3 {
   margin: 0;
   font-size: 1.08rem;
