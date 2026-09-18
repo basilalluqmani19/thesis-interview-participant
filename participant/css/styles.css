@@ -92,15 +92,15 @@ a {
   width: 74px;
   height: 74px;
   place-items: center;
-  border: 1px solid var(--border-strong);
-  background: var(--paper);
+  border: 0;
+  background: transparent;
   color: var(--muted);
   font-size: 0.68rem;
   font-weight: 700;
   line-height: 1.25;
   text-align: center;
   letter-spacing: 0.03em;
-  border-radius: 5px;
+  border-radius: 0;
 }
 
 .university-logo {
@@ -451,6 +451,26 @@ fieldset {
 
 .other-input-wrap.visible {
   display: block;
+}
+
+.audio-consent-note {
+  margin-top: 0.9rem;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--navy-700);
+  background: var(--blue-50);
+  border-radius: 6px;
+  padding: 0.85rem 0.95rem;
+  color: #314555;
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.audio-consent-note[hidden] {
+  display: none;
+}
+
+.audio-consent-note strong {
+  color: var(--navy-950);
 }
 
 label.input-label {

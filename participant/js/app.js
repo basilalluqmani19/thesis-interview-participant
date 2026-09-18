@@ -200,11 +200,14 @@
   function initializeConsent(form) {
     const startButton = document.querySelector("[data-start-interview]");
     const stopNotice = document.querySelector("[data-consent-stop]");
+    const audioConsentNote = document.querySelector("[data-audio-consent-note]");
     const update = () => {
       storeLocalForm(form);
       const selected = form.querySelector("input[name=participation_consent]:checked");
+      const audioSelected = form.querySelector("input[name=audio_consent]:checked");
       if (startButton && !startPending) startButton.disabled = !(selected && selected.value === "yes");
       if (stopNotice) stopNotice.hidden = !(selected && selected.value === "no");
+      if (audioConsentNote) audioConsentNote.hidden = !(audioSelected && audioSelected.value === "yes");
     };
     form.addEventListener("input", update);
     form.addEventListener("change", update);
